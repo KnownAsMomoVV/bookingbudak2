@@ -1,0 +1,60 @@
+/* Override react-date-range styles to match dark theme */
+.rdrCalendarWrapper {
+    background-color: #1a202c !important; /* Dark background color */
+    color: #cbd5e0 !important; /* Light text color */
+}
+
+.rdrMonthAndYearPickers select {
+    background-color: #2d3748 !important; /* Dark background for dropdowns */
+    color: #cbd5e0 !important; /* Light text color */
+}
+
+.rdrDayToday .rdrDayNumber span:after {
+    background-color: #4299e1 !important; /* Highlight today's date */
+}
+
+.rdrDayNumber span {
+    color: #cbd5e0 !important; /* Light text color for days */
+}
+
+.rdrDay:hover .rdrDayNumber span,
+.rdrDayActive .rdrDayNumber span {
+    background-color: #2d3748 !important; /* Dark background on hover/active */
+    color: #fff !important; /* White text color on hover/active */
+}
+
+.rdrDayPassive .rdrDayNumber span {
+    color: #4a5568 !important; /* Dimmed text color for passive days */
+}
+
+.rdrDayDisabled .rdrDayNumber span {
+    color: #718096 !important; /* Dimmed text color for disabled days */
+}
+
+.rdrDateDisplayItem {
+    background-color: #2d3748 !important; /* Dark background for date display */
+    color: #cbd5e0 !important; /* Light text color */
+    border: none !important; /* Remove border */
+}
+
+.rdrDateDisplayItem input {
+    color: #cbd5e0 !important; /* Light text color for input */
+}
+
+.rdrStartEdge .rdrDayNumber span,
+.rdrEndEdge .rdrDayNumber span,
+.rdrInRange .rdrDayNumber span {
+    background-color: #2c5282 !important; /* Background color for selected range */
+    color: #fff !important; /* White text color for selected range */
+}
+
+/* Hide the left sidebar */
+.rdrDefinedRangesWrapper {
+    display: none !important;
+}
+
+/* Adjust the calendar to take full width */
+.rdrCalendarWrapper {
+    width: 100% !important;
+    max-width: none !important;
+}
