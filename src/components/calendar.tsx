@@ -2,7 +2,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { DateRangePicker, RangeKeyDict } from 'react-date-range'
+import { DateRangePicker, RangeKeyDict, Range } from 'react-date-range'
 import { format } from 'date-fns'
 import { Button } from "@/components/ui/button"
 import {
@@ -46,7 +46,8 @@ export function CalendarForm() {
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
     })
-    const [range, setRange] = useState([{ startDate: new Date(), endDate: new Date(), key: 'selection' }])
+
+    const [range, setRange] = useState<Range[]>([{ startDate: new Date(), endDate: new Date(), key: 'selection' }])
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
         const formattedData = {
@@ -103,7 +104,7 @@ export function CalendarForm() {
                                         onChange={(item: RangeKeyDict) => {
                                             const { selection } = item;
                                             if (selection.startDate && selection.endDate) {
-                                                setRange([selection])
+                                                setRange([selection as Range])
                                                 field.onChange({ startDate: selection.startDate, endDate: selection.endDate })
                                             }
                                         }}
