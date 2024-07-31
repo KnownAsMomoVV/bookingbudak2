@@ -87,7 +87,7 @@ export function CalendarForm({ listingId }: { listingId: number }) {
                 toast({
                     title: "Error",
                     description: "This listing is already booked for the selected dates.",
-                    status: "error",
+                    // status: "error", // Removed this line
                 });
                 return;
             } else {
@@ -112,7 +112,7 @@ export function CalendarForm({ listingId }: { listingId: number }) {
             toast({
                 title: "Error",
                 description: error.message || "There was an error saving your booking. Please try again.",
-                status: "error",
+                // status: "error", // Removed this line
             });
         }
     }
@@ -123,7 +123,7 @@ export function CalendarForm({ listingId }: { listingId: number }) {
                 {bookingSuccess && (
                     <div className="fixed top-4 left-1/2 transform -translate-x-1/2 w-full max-w-md z-50">
                         <Alert>
-                            <AlertTitle>Sucess!</AlertTitle>
+                            <AlertTitle>Success!</AlertTitle>
                             <AlertDescription>
                                 Your booking was successful.
                             </AlertDescription>
