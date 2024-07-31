@@ -5,16 +5,26 @@ import Link from 'next/link';
 import ResponsiveAppBar from '@/components/navbar';
 import pb from '@/lib/pocketbase'; // Import the PocketBase client
 
+interface RecordModel {
+    id: string;
+    city: string;
+    street: string;
+    country_tag: string;
+    zipcode: string;
+    picture?: string;
+    // Add other fields as necessary
+}
+
 export default function Home() {
     const [searchQuery, setSearchQuery] = useState('');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [listings, setListings] = useState([]);
+    const [listings, setListings] = useState<RecordModel[]>([]);
 
     useEffect(() => {
         // Fetch listings from PocketBase
         async function fetchListings() {
             try {
-                const records = await pb.collection('apartments').getFullList({
+                const records: RecordModel[] = await pb.collection('apartments').getFullList({
                     sort: '-created',
                 });
                 setListings(records);
@@ -35,7 +45,7 @@ export default function Home() {
         listing.street.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    const getImageUrl = (listing) => {
+    const getImageUrl = (listing: RecordModel) => {
         return listing.picture ? `${pb.baseUrl}/api/files/apartments/${listing.id}/${listing.picture}` : '/images/default.jpg';
     };
 
@@ -61,7 +71,7 @@ export default function Home() {
 
             {/* Listings Grid */}
             <div className="w-full max-w-7xl mx-auto grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-                {filteredListings.map((listing, index) => (
+                {filteredListings.map((listing) => (
                     <div key={listing.id} className="bg-gray-800 rounded-lg shadow-md overflow-hidden">
                         <img
                             src={getImageUrl(listing)}
