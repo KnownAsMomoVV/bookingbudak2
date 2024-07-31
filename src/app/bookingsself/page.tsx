@@ -4,7 +4,6 @@ import pb from '@/lib/pocketbase';
 import { format } from 'date-fns';
 import Button from '@mui/material/Button';
 import Link from 'next/link';
-import withClientSide from '../../hoc/withClientSide'; // Adjust the path as necessary
 
 interface ListingDetails {
     id: string;
@@ -23,7 +22,7 @@ interface Booking {
     listingDetails?: ListingDetails | null; // To store listing details including the picture
 }
 
-const BookingsSelf = () => {
+export default function BookingsSelf() {
     const [bookings, setBookings] = useState<Booking[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -122,5 +121,3 @@ const BookingsSelf = () => {
         </div>
     );
 }
-
-export default withClientSide(BookingsSelf);
