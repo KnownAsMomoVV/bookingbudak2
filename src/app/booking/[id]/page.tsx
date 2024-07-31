@@ -70,7 +70,7 @@ export default function ListingDetail() {
                     <h1 className="text-4xl font-bold mb-4">{listing.city}</h1>
                     <img src={getImageUrl(listing)} alt={listing.city} className="w-full h-64 object-cover mb-4" />
                     <p className="text-gray-400">{listing.street}, {listing.number}, {listing.zipcode}</p>
-                    <CalendarForm listingId={listing.id} />
+                    <CalendarForm listingId={Number(listing.id)} />
                 </div>
             </div>
         </div>
