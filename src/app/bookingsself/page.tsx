@@ -41,7 +41,7 @@ export default function BookingsSelf() {
 
                 const bookingsWithDetails: Booking[] = await Promise.all(result.map(async (booking) => {
                     try {
-                        const listingDetails = await pb.collection('apartments').getOne(booking.listing);
+                        const listingDetails: ListingDetails = await pb.collection('apartments').getOne(booking.listing);
                         return {
                             id: booking.id,
                             listing: booking.listing,
