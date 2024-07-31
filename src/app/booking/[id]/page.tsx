@@ -7,16 +7,25 @@ import Button from '@mui/material/Button';
 import Link from 'next/link';
 import pb from '@/lib/pocketbase';
 
+interface RecordModel {
+    id: string;
+    city: string;
+    street: string;
+    number: string;
+    zipcode: string;
+    picture?: string; // optional field
+}
+
 export default function ListingDetail() {
     const params = useParams();
     const id = Array.isArray(params.id) ? params.id[0] : params.id;
-    const [listing, setListing] = useState(null);
+    const [listing, setListing] = useState<RecordModel | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function fetchListing() {
             try {
-                const record = await pb.collection('apartments').getOne(id);
+                const record: RecordModel = await pb.collection('apartments').getOne(id);
                 setListing(record);
             } catch (error) {
                 console.error('Error fetching listing:', error);
@@ -38,7 +47,7 @@ export default function ListingDetail() {
         return <p>Listing not found.</p>;
     }
 
-    const getImageUrl = (listing) => {
+    const getImageUrl = (listing: RecordModel) => {
         return listing.picture ? `${pb.baseUrl}/api/files/apartments/${listing.id}/${listing.picture}` : '/images/default.jpg';
     };
 
