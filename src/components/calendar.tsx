@@ -2,7 +2,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { DateRangePicker } from 'react-date-range'
+import { DateRangePicker, RangeKeyDict } from 'react-date-range'
 import { format } from 'date-fns'
 import { Button } from "@/components/ui/button"
 import {
@@ -89,7 +89,7 @@ export function CalendarForm() {
                                             )}
                                         >
                                             {field.value ? (
-                                                `${format(range[0].startDate, "PPP")} - ${format(range[0].endDate, "PPP")}`
+                                                `${format(range[0].startDate!, "PPP")} - ${format(range[0].endDate!, "PPP")}`
                                             ) : (
                                                 <span>Pick a date range</span>
                                             )}
@@ -100,9 +100,12 @@ export function CalendarForm() {
                                 <PopoverContent className="w-auto p-0" align="start">
                                     <DateRangePicker
                                         ranges={range}
-                                        onChange={(item) => {
-                                            setRange([item.selection])
-                                            field.onChange({ startDate: item.selection.startDate, endDate: item.selection.endDate })
+                                        onChange={(item: RangeKeyDict) => {
+                                            const { selection } = item;
+                                            if (selection.startDate && selection.endDate) {
+                                                setRange([selection])
+                                                field.onChange({ startDate: selection.startDate, endDate: selection.endDate })
+                                            }
                                         }}
                                         disabledDay={(date) => date < new Date()}
                                     />
