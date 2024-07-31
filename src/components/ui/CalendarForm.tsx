@@ -1,9 +1,8 @@
 "use client";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { DateRangePicker } from "react-date-range";
+import { DateRangePicker, Range, RangeKeyDict } from "react-date-range";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import {
@@ -49,7 +48,9 @@ export function CalendarForm({ listingId }: { listingId: number }) {
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
     });
-    const [range, setRange] = useState([{ startDate: new Date(), endDate: new Date(), key: "selection" }]);
+    const [range, setRange] = useState<Range[]>([
+        { startDate: new Date(), endDate: new Date(), key: "selection" },
+    ]);
     const [isBooked, setIsBooked] = useState(false);
     const [bookingSuccess, setBookingSuccess] = useState(false);
 
@@ -87,7 +88,6 @@ export function CalendarForm({ listingId }: { listingId: number }) {
                 toast({
                     title: "Error",
                     description: "This listing is already booked for the selected dates.",
-                    // status: "error", // Removed this line
                 });
                 return;
             } else {
@@ -112,7 +112,6 @@ export function CalendarForm({ listingId }: { listingId: number }) {
             toast({
                 title: "Error",
                 description: error.message || "There was an error saving your booking. Please try again.",
-                // status: "error", // Removed this line
             });
         }
     }
@@ -124,9 +123,7 @@ export function CalendarForm({ listingId }: { listingId: number }) {
                     <div className="fixed top-4 left-1/2 transform -translate-x-1/2 w-full max-w-md z-50">
                         <Alert>
                             <AlertTitle>Success!</AlertTitle>
-                            <AlertDescription>
-                                Your booking was successful.
-                            </AlertDescription>
+                            <AlertDescription>Your booking was successful.</AlertDescription>
                         </Alert>
                     </div>
                 )}
@@ -147,7 +144,10 @@ export function CalendarForm({ listingId }: { listingId: number }) {
                                             )}
                                         >
                                             {field.value ? (
-                                                `${format(range[0].startDate, "PPP")} - ${format(range[0].endDate, "PPP")}`
+                                                `${format(range[0].startDate!, "PPP")} - ${format(
+                                                    range[0].endDate!,
+                                                    "PPP"
+                                                )}`
                                             ) : (
                                                 <span>Pick a date range</span>
                                             )}
@@ -158,9 +158,21 @@ export function CalendarForm({ listingId }: { listingId: number }) {
                                 <PopoverContent className="w-auto p-0" align="start">
                                     <DateRangePicker
                                         ranges={range}
-                                        onChange={(item) => {
-                                            setRange([item.selection]);
-                                            field.onChange({ startDate: item.selection.startDate, endDate: item.selection.endDate });
+                                        onChange={(item: RangeKeyDict) => {
+                                            const { selection } = item;
+                                            if (selection.startDate && selection.endDate) {
+                                                setRange([
+                                                    {
+                                                        startDate: selection.startDate,
+                                                        endDate: selection.endDate,
+                                                        key: "selection",
+                                                    } as Range,
+                                                ]);
+                                                field.onChange({
+                                                    startDate: selection.startDate,
+                                                    endDate: selection.endDate,
+                                                });
+                                            }
                                         }}
                                         disabledDay={(date) => date < new Date()}
                                     />
