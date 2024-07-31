@@ -5,12 +5,21 @@ import { format } from 'date-fns';
 import Button from '@mui/material/Button';
 import Link from 'next/link';
 
+interface ListingDetails {
+    id: string;
+    city: string;
+    street: string;
+    number: string;
+    zipcode: string;
+    picture?: string;
+}
+
 interface Booking {
     id: string;
     listing: string;
     startDate: string;
     endDate: string;
-    listingDetails?: any; // To store listing details including the picture
+    listingDetails?: ListingDetails | null; // To store listing details including the picture
 }
 
 export default function BookingsSelf() {
@@ -30,7 +39,7 @@ export default function BookingsSelf() {
                     filter: `user_id="${userEmail}"`,
                 });
 
-                const bookingsWithDetails = await Promise.all(result.map(async (booking) => {
+                const bookingsWithDetails: Booking[] = await Promise.all(result.map(async (booking) => {
                     try {
                         const listingDetails = await pb.collection('apartments').getOne(booking.listing);
                         return { ...booking, listingDetails };
@@ -55,8 +64,8 @@ export default function BookingsSelf() {
         return <p>Loading...</p>;
     }
 
-    const getImageUrl = (listingDetails) => {
-        return listingDetails.picture ? `${pb.baseUrl}/api/files/apartments/${listingDetails.id}/${listingDetails.picture}` : '/images/default.jpg';
+    const getImageUrl = (listingDetails: ListingDetails | null) => {
+        return listingDetails?.picture ? `${pb.baseUrl}/api/files/apartments/${listingDetails.id}/${listingDetails.picture}` : '/images/default.jpg';
     };
 
     return (
