@@ -1,9 +1,10 @@
-'use client'; // Add this line at the top
+'use client';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import ResponsiveAppBar from '@/components/navbar';
-import pb from '@/lib/pocketbase'; // Import the PocketBase client
+import pb from '@/lib/pocketbase';
+import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 interface RecordModel {
     id: string;
@@ -17,27 +18,25 @@ interface RecordModel {
 
 export default function Home() {
     const [searchQuery, setSearchQuery] = useState('');
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useSessionStorage('isLoggedIn', 'false');
     const [listings, setListings] = useState<RecordModel[]>([]);
 
-    useEffect(() => {
-        // Fetch listings from PocketBase
-        async function fetchListings() {
-            try {
-                const records: RecordModel[] = await pb.collection('apartments').getFullList({
-                    sort: '-created',
-                });
-                setListings(records);
-            } catch (error) {
-                console.error('Error fetching listings:', error);
-            }
+    async function fetchListings() {
+        try {
+            const records: RecordModel[] = await pb.collection('apartments').getFullList({
+                sort: '-created',
+            });
+            setListings(records);
+        } catch (error) {
+            console.error('Error fetching listings:', error);
         }
+    }
 
-        // Check login status
-        const loggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
-        setIsLoggedIn(loggedIn);
-
-        fetchListings();
+    useEffect(() => {
+        // Check if running in the browser
+        if (typeof window !== 'undefined') {
+            fetchListings();
+        }
     }, []);
 
     const filteredListings = listings.filter(listing =>
