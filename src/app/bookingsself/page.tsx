@@ -42,10 +42,22 @@ export default function BookingsSelf() {
                 const bookingsWithDetails: Booking[] = await Promise.all(result.map(async (booking) => {
                     try {
                         const listingDetails = await pb.collection('apartments').getOne(booking.listing);
-                        return { ...booking, listingDetails };
+                        return {
+                            id: booking.id,
+                            listing: booking.listing,
+                            startDate: booking.startDate,
+                            endDate: booking.endDate,
+                            listingDetails: listingDetails || null,
+                        };
                     } catch (error) {
                         console.error('Error fetching listing details:', error);
-                        return { ...booking, listingDetails: null };
+                        return {
+                            id: booking.id,
+                            listing: booking.listing,
+                            startDate: booking.startDate,
+                            endDate: booking.endDate,
+                            listingDetails: null,
+                        };
                     }
                 }));
 
