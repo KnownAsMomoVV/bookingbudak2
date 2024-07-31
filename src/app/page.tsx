@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import ResponsiveAppBar from '@/components/navbar';
 import pb from '@/lib/pocketbase';
-import { useSessionStorage } from '@/hooks/useSessionStorage';
+import { useSessionStorage } from 'usehooks-ts'
 
 interface RecordModel {
     id: string;
